@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="JPAService">
+		<jta-data-source>jdbc/edulite</jta-data-source>
+		<class>edusystem.eduLite.entity.Grade</class>
+		<class>edusystem.eduLite.entity.Notification</class>
+		<class>edusystem.eduLite.entity.Stream</class>
+		<class>edusystem.eduLite.entity.SubjectGrade</class>
+		<class>edusystem.eduLite.entity.Usertype</class>
+		<class>edusystem.eduLite.entity.UserSubject</class>
+		<class>edusystem.eduLite.entity.Subject</class>
+		<class>edusystem.eduLite.entity.Assignment</class>
+		<class>edusystem.eduLite.entity.User</class>
+		<class>edusystem.eduLite.entity.UserAssignment</class>
+		<!-- <exclude-unlisted-classes>false</exclude-unlisted-classes> -->
+		<properties>
+			<!-- <property name="eclipselink.logging.level" value="FINEST"/>
+			<property name="openjpa.Log" value="openjpa.jdbc.SQL=trace"/>
+			<property name="eclipselink.logging.parameters" value="true"/>
+			<property name="openjpa.LockTimeout" value="30000" />
+			<property name="openjpa.jdbc.TransactionIsolation" value="read-committed" />
+			<property name="openjpa.jdbc.UpdateManager" value="operation-order" /> -->
+		</properties>
+	</persistence-unit>
+</persistence>
