@@ -8,6 +8,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import edusystem.eduLite.dto.StudentDto;
+import edusystem.eduLite.dto.StudentSubjectAssignDto;
 import edusystem.eduLite.dto.SubjectDto;
 import edusystem.eduLite.dto.UserSubjectDto;
 import edusystem.eduLite.model.SubjectModel;
@@ -29,10 +30,26 @@ public class SubjectService {
 		return response.buildResponse(Status.OK, userSubjectDto);
 	}
 	
+	public Response _assignSubject(StudentSubjectAssignDto studentDto) {
+		List<UserSubjectDto> userSubjectDto = subjectModel._assignSubjectToStudent(studentDto);
+		if(userSubjectDto == null) {
+			return response.buildResponse(Status.INTERNAL_SERVER_ERROR, new FailureResponse("Failed to assign subject to the student"));
+		}
+		return response.buildResponse(Status.OK, userSubjectDto);
+	}
+	
 	public Response getSubjectsByStudent(StudentDto studentDto) {
 		List<SubjectDto> subjects = subjectModel.getSubjectsByStudent(studentDto);
 		if(subjects == null) {
 			return response.buildResponse(Status.NOT_FOUND, new FailureResponse("Failed to retrieve subjects assigned to the student"));
+		}
+		return response.buildResponse(Status.OK, subjects);
+	}
+	
+	public Response getSubjects() {
+		List<SubjectDto> subjects = subjectModel.getSubjects();
+		if(subjects == null) {
+			return response.buildResponse(Status.NOT_FOUND, new FailureResponse("Failed to retrieve all subjects"));
 		}
 		return response.buildResponse(Status.OK, subjects);
 	}

@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response.Status;
 public class ResponseBuilder {
 	
 	public Response buildResponse(Status status, Object obj) {
-        return Response.status(status).entity(obj).build();
+        return Response.status(status).entity(obj).header("Access-Control-Allow-Origin", "*").build();
     }
     
     public Response buildResponseError(Object msg) {

@@ -13,6 +13,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import edusystem.eduLite.dto.StudentDto;
+import edusystem.eduLite.dto.StudentSubjectAssignDto;
 import edusystem.eduLite.dto.SubjectDto;
 import edusystem.eduLite.dto.UserSubjectDto;
 import edusystem.eduLite.entity.Grade;
@@ -48,6 +49,31 @@ public class SubjectModel {
 		}
 	}
 
+	public List<UserSubjectDto> _assignSubjectToStudent(StudentSubjectAssignDto studentDto) {
+		List<UserSubjectDto> list = new ArrayList<>();
+		try {
+			logger.log(Level.INFO, "{0} subjects selected", studentDto.getSubjectIDs().size());
+			if (!studentDto.getSubjectIDs().isEmpty()) {
+				for (SubjectDto subjectDto : studentDto.getSubjectIDs()) {
+					UserSubject userSubject = new UserSubject();
+					Subject subject = em.find(Subject.class, subjectDto.getSubjectId());
+					User user = em.find(User.class, studentDto.getUserId());
+					userSubject.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+					userSubject.setSubject(subject);
+					userSubject.setUser(user);
+					list.add(new UserSubjectDto(userSubject));
+					em.persist(userSubject);
+				}
+				logger.log(Level.INFO, "Subject Added Successfully");
+				return list;
+			}
+			return null;
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Error in method: assignSubject()", e);
+			return null;
+		}
+	}
+
 	public int assignSubjectToTeacher(StudentDto studentDto, int subjectId) {
 		try {
 
@@ -70,7 +96,7 @@ public class SubjectModel {
 						logger.log(Level.INFO, "Grades of the teacher have been updated..");
 						int gradeId = Integer.valueOf(studentDto.getTeacherGrades());
 						this.addToSubjectGrade(user, subjectId, gradeId);
-						//Lastly add it into the UserSubject table
+						// Lastly add it into the UserSubject table
 						this.assignSubject(studentDto, subjectId);
 					} else {
 						logger.log(Level.WARNING, "The grade for a subject was not selected");
@@ -94,7 +120,7 @@ public class SubjectModel {
 
 		Grade grade = em.find(Grade.class, gradeId);
 		Subject subject = em.find(Subject.class, subjectId);
-		
+
 		if (grade != null && subject != null) {
 			subjectGrade.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 			subjectGrade.setDescription(user.getFirstname() + " " + user.getLastName() + " has been assigned to teach "
@@ -103,8 +129,8 @@ public class SubjectModel {
 			subjectGrade.setSubject(subject);
 			em.persist(subjectGrade);
 			logger.log(Level.INFO, "Info added into SubjectGrade table");
-		}
-		else logger.log(Level.WARNING, "Could not find either the subject or grade");
+		} else
+			logger.log(Level.WARNING, "Could not find either the subject or grade");
 
 	}
 
@@ -137,6 +163,23 @@ public class SubjectModel {
 			return list;
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Error in method: getSubjectByStudent()", e);
+			return null;
+		}
+	}
+
+	public List<SubjectDto> getSubjects() {
+		try {
+			List<SubjectDto> list = new ArrayList<>();
+			TypedQuery<Subject> query = em.createNamedQuery("Subject.findAll", Subject.class);
+			if (query != null) {
+				for (Subject subject : query.getResultList()) {
+					list.add(new SubjectDto(subject));
+				}
+			}
+			logger.log(Level.INFO, "Number of Subject(s): {0}", list.size());
+			return list;
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Error in method: getSubjects()", e);
 			return null;
 		}
 	}

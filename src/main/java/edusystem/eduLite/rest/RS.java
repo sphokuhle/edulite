@@ -24,6 +24,7 @@ import edusystem.eduLite.dto.GradeDto;
 import edusystem.eduLite.dto.NotificationDto;
 import edusystem.eduLite.dto.StreamDto;
 import edusystem.eduLite.dto.StudentDto;
+import edusystem.eduLite.dto.StudentSubjectAssignDto;
 import edusystem.eduLite.dto.SubjectDto;
 import edusystem.eduLite.dto.UserAssignmentDto;
 import edusystem.eduLite.dto.UserSubjectDto;
@@ -176,13 +177,22 @@ public class RS {
 		return userService.deregisterStudent(userDto);
 	}
 	
-	@POST
+	/*@POST
     @Path("assignSubjectToStudent/{subjectId}")
 	@Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
 	@ApiOperation( value = "This operation is used to assign a subject to a student." )
 	public Response assignSubjectToStudent(StudentDto studentDto,  @PathParam("subjectId") int subjectId) {
 		return subjectService.assignSubject(studentDto, subjectId);
+	}*/
+	
+	@POST
+    @Path("assignSubjectToStudent")
+	@Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation( value = "This operation is used to assign a subject to a student." )
+	public Response assignSubjectToStudent(StudentSubjectAssignDto studentDto) {
+		return subjectService._assignSubject(studentDto);
 	}
 	
 	@POST
@@ -201,6 +211,15 @@ public class RS {
 	@ApiOperation( value = "This operation is used to retrieve a list of subjects assigned to a student/user." )
 	public Response assignSubjectToStudent(StudentDto studentDto) {
 		return subjectService.getSubjectsByStudent(studentDto);
+	}
+	
+	@POST
+    @Path("subjects")
+	@Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation( value = "This operation is used to retrieve a list of all subjects." )
+	public Response getAllSubjects() {
+		return subjectService.getSubjects();
 	}
 	
 	@POST
